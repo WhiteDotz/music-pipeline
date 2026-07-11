@@ -1,0 +1,30 @@
+# Ejes temáticos para rotación semanal de música.
+# weekly-axis.sh elige uno por semana ISO usando: linea_n = (semana_iso % total_lineas).
+# Comentarios con # se ignoran. Líneas vacías también.
+# Formato: <slug>|<descripción humana>|<URL playlist YT Music o "search:término">
+#
+# search:<query> = búsqueda yt-dlp (ytsearchN:); produce mix dinámico semanal
+# https://...    = playlist fija (cura tú las gemas)
+#
+# Ideas de partida — agregá/quitá libremente:
+
+cumbia-mx|Cumbia mexicana clásica|search:cumbia mexicana clasica
+city-pop-jp|Japan City Pop 80s|search:japanese city pop 80s
+afrobeat-ng|Afrobeat Nigeria|search:fela kuti afrobeat nigeria
+bossa-br|Bossa Nova Brasil|search:bossa nova classics
+arabesk-tr|Arabesk turco|search:arabesk turkish music
+rai-dz|Raï argelino|search:rai algerian
+jazz-fusion|Jazz fusion 70s|search:jazz fusion 70s
+trip-hop|Trip-hop UK 90s|search:trip hop 90s portishead massive attack
+hyperpop|Hyperpop|search:hyperpop 100 gecs
+ambient-deep|Ambient deep listening|search:ambient brian eno deep listening
+flamenco-es|Flamenco moderno|search:flamenco nuevo
+chanson-fr|Chanson française|search:chanson francaise classic
+funk-70s|Funk 70s|search:funk 70s parliament earth wind
+dub-jm|Dub Jamaica|search:dub jamaica king tubby
+samba-rock|Samba rock|search:samba rock jorge ben
+mariachi|Mariachi tradicional|search:mariachi vargas tecalitlan
+salsa-pr|Salsa puertorriqueña|search:salsa pr fania
+qawwali-pk|Qawwali Pakistán|search:qawwali nusrat fateh ali khan
+synthwave|Synthwave 2010s|search:synthwave kavinsky carpenter brut
+shoegaze|Shoegaze|search:shoegaze my bloody valentine slowdive

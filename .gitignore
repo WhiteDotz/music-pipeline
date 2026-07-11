@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+
+# credentials live in ~/.lb-sync.env (mode 600), never in git
+*.env
+
+# runtime artifacts
+*.log
+*.tsv
