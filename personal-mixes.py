@@ -182,7 +182,7 @@ FORMATO OUTPUT: JSON ESTRICTO sin markdown wrapper. Ej:
 
 
 MB_API = "https://musicbrainz.org/ws/2"
-MB_UA = "hp15-personal-mixes/1.0 (contact@example.com)"
+MB_UA = "hp15-personal-mixes/1.0 (silverzzz.10.05.99@gmail.com)"
 _mb_last_call = [0.0]
 
 
@@ -267,13 +267,22 @@ def run_fanout(slug: str, seeds: list[str], max_tracks: int) -> list[tuple[str, 
     out_file = MUSIC_DIR / f".tmp-personal-urls-{slug}.txt"
     eje_file.write_text(json.dumps({"slug": slug, "seeds": seeds}), encoding="utf-8")
 
-    rc = subprocess.run([
-        PYTHON, FANOUT,
-        "--eje", str(eje_file),
-        "--out", str(out_file),
-        "--max-tracks", str(max_tracks),
-        "--related-only",
-    ], capture_output=True, text=True)
+    # Sin timeout, un fanout colgado (red muerta a mitad de una llamada a YTM)
+    # deja el cron de los mixes clavado hasta el próximo reboot.
+    try:
+        rc = subprocess.run([
+            PYTHON, FANOUT,
+            "--eje", str(eje_file),
+            "--out", str(out_file),
+            "--max-tracks", str(max_tracks),
+            "--related-only",
+        ], capture_output=True, text=True, timeout=600)
+    except subprocess.TimeoutExpired:
+        print(f"  [WARN] fanout {slug}: timeout (600s), se descarta el mix",
+              file=sys.stderr)
+        eje_file.unlink(missing_ok=True)
+        out_file.unlink(missing_ok=True)
+        return []
 
     eje_file.unlink(missing_ok=True)
 

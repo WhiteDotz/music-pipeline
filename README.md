@@ -71,9 +71,46 @@ dl-single.sh                                                             │
   badge (download archive ∪ normalized title|artist match against the beets
   DB), single-worker job queue.
 
+## Setup
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt   # + yt-dlp, beets and ffmpeg on PATH
+cp .lb-sync.env.example ~/.lb-sync.env && chmod 600 ~/.lb-sync.env
+```
+
+Then wire the generators into cron. There is no daemon: every piece is a
+script that runs, writes its output and exits.
+
+A generated playlist is a plain M3U whose first line carries the display
+name Navidrome will show:
+
+```
+#PLAYLIST:W24: Bossa Nova
+/music/Joao Gilberto - Chega de Saudade.opus
+/music/Astrud Gilberto - Agua de Beber.opus
+```
+
 ## Conventions
 
 - Credentials only via environment (`~/.lb-sync.env`, mode 600) — see
   `.lb-sync.env.example`. Nothing secret in code or crontab.
 - Every cron job logs to a central log dir with self-managed rotation.
 - Destructive tools default to dry-run and back up databases before writing.
+
+## Design notes
+
+- **The request app has no authentication** and is meant for a home LAN
+  only. It shells out to the download pipeline, so exposing it to the
+  internet would hand strangers a download queue on your box. Put it behind
+  a VPN (Tailscale or equivalent) if you need it off-LAN, and swap Flask's
+  development server for a real WSGI server while you are at it.
+- **Subsonic auth is salted MD5** — that is the protocol, not a hashing
+  choice. It means Navidrome's plaintext password must be readable by the
+  scripts, which is why it lives in a mode-600 env file and never in a
+  crontab line.
+- Playlist filenames are kept **stable** on purpose. Navidrome tracks an
+  imported M3U by path, so a filename with the week number in it created a
+  brand-new playlist entity every week and nothing ever cleaned them up.
+  The week lives in the `#PLAYLIST:` header instead; the file keeps its
+  name and the same entity gets renamed.

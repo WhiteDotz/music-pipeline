@@ -1,0 +1,15 @@
+# Python deps of the scripts in this repo. The heavy lifting is done by external
+# CLI tools that are NOT pip packages — install them separately:
+#
+#   yt-dlp     (ingest)          https://github.com/yt-dlp/yt-dlp
+#   beets      (tagging)         https://beets.io
+#   ffmpeg     (used by yt-dlp)
+#
+# beets is listed here too because the maintenance scripts import its metadata
+# layer (mediafile) and read its SQLite library directly.
+
+beets>=1.6
+mediafile>=0.12          # tag read/write (pulled in by beets, pinned explicitly)
+mutagen>=1.47            # audio duration/hashing in the dedup scripts
+ytmusicapi>=1.7          # search + recommendations
+flask>=3.0               # music-request web app
